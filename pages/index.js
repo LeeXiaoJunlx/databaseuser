@@ -164,9 +164,9 @@ export default function Home() {
 
       <div className="card">
         <h1>Hello User 👋</h1>
-<p class="text-sm text-white mt-1">
-  Masukkan token yang dikirim oleh <b>Owner</b></p>
-
+<p class="text-sm text-white text-center mt-1">
+  Masukkan kode token yang dikirim ke WhatsApp Anda
+</p>
         {step === "token" && (
           <>
             <input
