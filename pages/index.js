@@ -29,71 +29,73 @@ export default function Home() {
   }
 
   return (
-    <div className="page">
+    <div className="bg">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
         * {
           box-sizing: border-box;
-        }
-        body, html, .page {
-          padding: 0;
-          margin: 0;
           font-family: 'Inter', sans-serif;
-          background: linear-gradient(135deg, #e0f7fa, #e1f5fe);
+        }
+        body, html, .bg {
+          margin: 0;
+          padding: 0;
           height: 100vh;
+          background: #0e0e2c;
           display: flex;
           justify-content: center;
           align-items: center;
+          position: relative;
+          overflow: hidden;
         }
         .card {
-          background: white;
-          padding: 32px;
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          padding: 40px 30px;
           border-radius: 16px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-          max-width: 420px;
-          width: 100%;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
           text-align: center;
-          animation: fadeIn 0.5s ease;
+          width: 100%;
+          max-width: 380px;
         }
-        .card h2 {
-          margin-bottom: 20px;
+        h1 {
+          color: #fff;
+          font-size: 28px;
+          margin-bottom: 30px;
           font-weight: 600;
-          font-size: 22px;
-          color: #333;
-        }
-        .card img {
-          margin-bottom: 20px;
-          border-radius: 50%;
         }
         input {
           width: 100%;
-          padding: 14px 16px;
-          border: 1px solid #ccc;
-          border-radius: 10px;
-          font-size: 15px;
-          margin-top: 10px;
-          transition: border 0.3s;
+          padding: 12px 14px;
+          margin-top: 15px;
+          border-radius: 8px;
+          border: none;
+          background: rgba(255,255,255,0.1);
+          color: #fff;
+          font-size: 14px;
         }
-        input:focus {
-          border-color: #0072ff;
-          outline: none;
+        input::placeholder {
+          color: #ccc;
         }
         button {
           width: 100%;
-          padding: 14px;
-          margin-top: 18px;
+          margin-top: 25px;
+          padding: 12px;
           border: none;
-          border-radius: 10px;
-          background-color: #0072ff;
-          color: white;
-          font-size: 15px;
+          border-radius: 8px;
+          background: white;
+          color: #0e0e2c;
           font-weight: 600;
+          font-size: 14px;
           cursor: pointer;
-          transition: background 0.3s ease, transform 0.2s;
+          transition: all 0.3s ease;
         }
         button:hover {
-          background-color: #005fd1;
-          transform: translateY(-1px);
+          background: #eee;
+        }
+        .msg {
+          margin-top: 20px;
+          font-size: 14px;
+          color: #ddd;
         }
         .loader {
           margin-top: 20px;
@@ -104,7 +106,7 @@ export default function Home() {
         .dot {
           width: 10px;
           height: 10px;
-          background: #0072ff;
+          background: white;
           border-radius: 50%;
           animation: bounce 0.6s infinite alternate;
         }
@@ -120,20 +122,30 @@ export default function Home() {
             transform: translateY(-10px);
           }
         }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+        .bg::before {
+          content: '';
+          position: absolute;
+          width: 700px;
+          height: 700px;
+          background: radial-gradient(circle, #1b1b46, transparent 70%);
+          top: -100px;
+          left: -100px;
+          z-index: 0;
         }
-        .msg {
-          margin-top: 15px;
-          font-size: 14px;
-          color: #555;
+        .bg::after {
+          content: '';
+          position: absolute;
+          width: 600px;
+          height: 600px;
+          background: radial-gradient(circle, #262652, transparent 70%);
+          bottom: -100px;
+          right: -100px;
+          z-index: 0;
         }
       `}</style>
 
       <div className="card">
-        <img src="https://ui-avatars.com/api/?name=Verify&background=0072ff&color=fff" width="64" />
-        <h2>Verifikasi WhatsApp</h2>
+        <h1>Verifikasi</h1>
 
         {step === "token" && (
           <>
@@ -173,7 +185,7 @@ export default function Home() {
           </div>
         )}
 
-        {msg && <p className="msg">{msg}</p>}
+        {msg && <div className="msg">{msg}</div>}
       </div>
     </div>
   )
