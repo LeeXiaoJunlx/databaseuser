@@ -163,7 +163,9 @@ export default function Home() {
       `}</style>
 
       <div className="card">
-        <h1>Verifikasi WhatsApp</h1>
+        <h1>Hello User 👋</h1>
+<p class="text-sm text-gray-500 text-center mt-1">
+  Masukkan token yang dikirim oleh Owner</p>
 
         {step === "token" && (
           <>
