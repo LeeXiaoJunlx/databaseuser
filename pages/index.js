@@ -150,7 +150,7 @@ export default function Home() {
         {step === "token" && (
           <>
             <input placeholder="🔐 Token 16 karakter" value={token} onChange={e => setToken(e.target.value)} />
-            <div className="g-recaptcha" data-sitekey="6LfmJpIrAAAAAI7we7sSpQcnB9FnH2x6iQCfMlsm"></div>
+            <div className="g-recaptcha" data-sitekey="6LchLJIrAAAAAHZU5-AJwIqbq-4ipqBipQmKMAFD"></div>
             <button onClick={() => {
               if (!token) return setMsg("⚠️ Token wajib diisi!");
               setMsg("")
