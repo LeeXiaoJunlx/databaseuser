@@ -164,8 +164,8 @@ export default function Home() {
 
       <div className="card">
         <h1>Hello User 👋</h1>
-<p class="text-sm text-gray-500 text-center mt-1">
-  Masukkan token yang dikirim oleh Owner</p>
+<p class="text-sm text-white mt-1">
+  Masukkan token yang dikirim oleh <b>Owner</b></p>
 
         {step === "token" && (
           <>
