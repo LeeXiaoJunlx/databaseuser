@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export default function Home() {
   const [step, setStep] = useState("token")
@@ -6,26 +6,47 @@ export default function Home() {
   const [number, setNumber] = useState("")
   const [msg, setMsg] = useState("")
   const [loading, setLoading] = useState(false)
+  const [captchaReady, setCaptchaReady] = useState(false)
+
+  useEffect(() => {
+    const loadCaptcha = () => {
+      if (window.grecaptcha) setCaptchaReady(true)
+    }
+    if (typeof window !== "undefined") {
+      if (!window.grecaptcha) {
+        const s = document.createElement("script")
+        s.src = "https://www.google.com/recaptcha/api.js"
+        s.async = true
+        s.defer = true
+        s.onload = loadCaptcha
+        document.body.appendChild(s)
+      } else loadCaptcha()
+    }
+  }, [])
 
   const submit = async () => {
-    if (!token || !number) return setMsg("⚠️ Isi token dan nomor!")
+    if (!token || !number) return setMsg("⚠️ Lengkapi token dan nomor!")
+
+    const recaptchaToken = window.grecaptcha.getResponse()
+    if (!recaptchaToken) return setMsg("❗ Silakan centang 'Saya bukan robot'!")
 
     setLoading(true)
-    setMsg("Memverifikasi...")
+    setMsg("⏳ Memverifikasi...")
 
     try {
       const res = await fetch("/api/verifikasi", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token, number })
+        body: JSON.stringify({ token, number, recaptchaToken })
       })
       const data = await res.json()
       setMsg(data.message)
       if (data.success) setStep("done")
     } catch (err) {
-      setMsg("❌ Gagal menghubungi server.")
+      setMsg("❌ Server error")
     } finally {
       setLoading(false)
+      window.grecaptcha.reset()
     }
   }
 
@@ -42,11 +63,11 @@ export default function Home() {
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
         .card {
-          background: rgba(255,255,255,0.15);
+          background: rgba(255,255,255,0.1);
           backdrop-filter: blur(20px);
           padding: 40px;
           border-radius: 20px;
-          box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+          box-shadow: 0 25px 60px rgba(0,0,0,0.3);
           max-width: 420px;
           width: 100%;
           animation: fadeIn 0.7s ease;
@@ -60,7 +81,7 @@ export default function Home() {
           border-radius: 12px;
           margin-top: 20px;
           font-size: 15px;
-          background: rgba(255,255,255,0.3);
+          background: rgba(255,255,255,0.2);
           color: white;
           backdrop-filter: blur(5px);
           outline: none;
@@ -112,10 +133,6 @@ export default function Home() {
           to {opacity: 1; transform: translateY(0);}
         }
 
-        .logo {
-          margin-bottom: 20px;
-        }
-
         .success {
           color: #b4ffb4;
         }
@@ -126,26 +143,25 @@ export default function Home() {
       `}</style>
 
       <div className="card">
-        <div className="logo">
-          <img src="https://ui-avatars.com/api/?name=WA+Bot&background=764ba2&color=fff&size=100" width="60" style={{ borderRadius: "50%" }} />
-        </div>
-        <h2 style={{ marginBottom: 10 }}>Verifikasi Token WhatsApp</h2>
-        <p style={{ fontSize: 14, marginBottom: 20 }}>Masukkan token yang kamu dapat dari bot.</p>
+        <img src="https://ui-avatars.com/api/?name=Bot&background=764ba2&color=fff" width="60" style={{ borderRadius: "50%", marginBottom: 20 }} />
+        <h2>Verifikasi WhatsApp</h2>
+        <p style={{ fontSize: 14 }}>Masukkan token dan nomor kamu</p>
 
         {step === "token" && (
           <>
             <input placeholder="🔐 Token 16 karakter" value={token} onChange={e => setToken(e.target.value)} />
+            <div className="g-recaptcha" data-sitekey="6LfmJpIrAAAAAI7we7sSpQcnB9FnH2x6iQCfMlsm"></div>
             <button onClick={() => {
-              if (!token) return setMsg("⚠️ Token tidak boleh kosong!");
-              setStep("number")
+              if (!token) return setMsg("⚠️ Token wajib diisi!");
               setMsg("")
+              setStep("number")
             }}>Lanjut</button>
           </>
         )}
 
         {step === "number" && (
           <>
-            <input placeholder="📱 Nomor WhatsApp (628xx)" value={number} onChange={e => setNumber(e.target.value)} />
+            <input placeholder="📱 Nomor WhatsApp (62xxx)" value={number} onChange={e => setNumber(e.target.value)} />
             <button onClick={submit}>Verifikasi Sekarang</button>
           </>
         )}
@@ -159,9 +175,7 @@ export default function Home() {
         )}
 
         {msg && (
-          <p className={msg.includes("berhasil") ? "success" : "error"} style={{ marginTop: 20 }}>
-            {msg}
-          </p>
+          <p className={msg.includes("berhasil") ? "success" : "error"} style={{ marginTop: 20 }}>{msg}</p>
         )}
       </div>
     </div>
