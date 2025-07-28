@@ -10,12 +10,6 @@ export default async function handler(req, res) {
   const { token, number } = req.body
   const owner = process.env.GITHUB_USERNAME
   const repo = process.env.GITHUB_REPO
-  
-
-const captchaResult = await validateCaptcha.json()
-if (!captchaResult.success) {
-  return res.status(400).json({ success: false, message: "Verifikasi CAPTCHA gagal!" })
-}
 
   try {
     // Ambil token.json
