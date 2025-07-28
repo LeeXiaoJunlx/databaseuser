@@ -36,7 +36,7 @@ export default function Home() {
           box-sizing: border-box;
           font-family: 'Inter', sans-serif;
         }
-        body, html, .bg {
+        html, body, .bg {
           margin: 0;
           padding: 0;
           height: 100vh;
@@ -48,24 +48,26 @@ export default function Home() {
           overflow: hidden;
         }
         .card {
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(10px);
+          background: rgba(255, 255, 255, 0.06);
+          backdrop-filter: blur(12px);
           padding: 40px 30px;
           border-radius: 16px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.4);
           text-align: center;
           width: 100%;
-          max-width: 380px;
+          max-width: 400px;
+          z-index: 1;
+          animation: fadeIn 0.5s ease;
         }
         h1 {
           color: #fff;
-          font-size: 28px;
+          font-size: 24px;
           margin-bottom: 30px;
           font-weight: 600;
         }
         input {
           width: 100%;
-          padding: 12px 14px;
+          padding: 13px 15px;
           margin-top: 15px;
           border-radius: 8px;
           border: none;
@@ -79,7 +81,7 @@ export default function Home() {
         button {
           width: 100%;
           margin-top: 25px;
-          padding: 12px;
+          padding: 13px;
           border: none;
           border-radius: 8px;
           background: white;
@@ -90,12 +92,12 @@ export default function Home() {
           transition: all 0.3s ease;
         }
         button:hover {
-          background: #eee;
+          background: #f1f1f1;
         }
         .msg {
           margin-top: 20px;
-          font-size: 14px;
-          color: #ddd;
+          font-size: 13px;
+          color: #ccc;
         }
         .loader {
           margin-top: 20px;
@@ -122,30 +124,46 @@ export default function Home() {
             transform: translateY(-10px);
           }
         }
-        .bg::before {
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .bg::before, .bg::after {
           content: '';
           position: absolute;
-          width: 700px;
-          height: 700px;
-          background: radial-gradient(circle, #1b1b46, transparent 70%);
-          top: -100px;
-          left: -100px;
+          border-radius: 50%;
           z-index: 0;
         }
+        .bg::before {
+          width: 500px;
+          height: 500px;
+          background: radial-gradient(circle, #1b1b46, transparent 70%);
+          top: -150px;
+          left: -150px;
+        }
         .bg::after {
-          content: '';
-          position: absolute;
           width: 600px;
           height: 600px;
           background: radial-gradient(circle, #262652, transparent 70%);
-          bottom: -100px;
-          right: -100px;
-          z-index: 0;
+          bottom: -150px;
+          right: -150px;
+        }
+        @media (max-width: 480px) {
+          .card {
+            padding: 30px 20px;
+            max-width: 90%;
+          }
+          h1 {
+            font-size: 20px;
+          }
+          button {
+            font-size: 13px;
+          }
         }
       `}</style>
 
       <div className="card">
-        <h1>Verifikasi</h1>
+        <h1>Verifikasi WhatsApp</h1>
 
         {step === "token" && (
           <>
